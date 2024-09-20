@@ -1,57 +1,89 @@
 <template>
-    <div class="min-h-screen bg-blue-50 p-5 m-0 block">
-        <div class="max-w-7xl mx-auto relative">
-
+    <div class="min-h-screen bg-blue-50 p-5 m-0">
+        <div class="max-w-6xl mx-auto relative">
             <div class="flex flex-wrap">
                 <div class="w-full p-2 sticky top-0 z-50">
                     <div class="min-h-[75px] bg-white shadow-md rounded-md flex items-center justify-between p-4">
                         <div class="font-bold text-lg">Add a Product</div>
                         <div class="flex">
-                            <div class="px-2">
-                                <button class="bg-white font-bold text-gray-500 py-1 px-4">
-                                    Discard
-                                </button>
-                            </div>
-                            <div class="px-2">
-                                <button class="bg-blue-500 font-bold text-white py-1 px-4 rounded-md">
-                                    Save
-                                </button>
-                            </div>
+                            <Link
+                                :href="route('products.index')"
+                                class="bg-white font-bold text-red-500 py-1.5 px-4 mr-2"
+                            >
+                                Discard
+                            </Link>
+                            <button @click="validateProduct" class="bg-blue-500 font-bold text-white py-1.5 px-4 rounded-md">
+                                {{ product ? 'Update Record' : 'Save Record' }}
+                            </button>
                         </div>
                     </div>
                 </div>
                 <div class="shrink-0 grow-0 basis-auto w-full md:w-3/4 p-2">
                     <div class="flex flex-wrap">
-                        <div v-for="(content, key) in contents" class="shrink-0 grow-0 basis-auto w-full" :key="key">
+                        <div class="shrink-0 grow-0 basis-auto w-full">
                             <div class="bg-white shadow-sm rounded-md border border-solid border-gray-100 mb-4">
                                 <div class="flex flex-col">
-                                    <div class="bg-gray-50 font-bold rounded-t-md p-2">
-                                        Basic Informations
+                                    <div class="bg-gray-50 font-bold rounded-t-md p-4">
+                                        Banners
                                     </div>
                                     <div class="flex flex-wrap p-2">
-                                        <div class="shrink-0 grow-0 basis-auto w-1/2 p-2">
+                                        <div class="shrink-0 grow-0 basis-auto w-full md:w-1/2 p-2">
                                             <div class="flex flex-wrap">
                                                 <div class="shrink-0 grow-0 basis-auto w-full mb-2">
                                                     <InputLabel
-                                                        for="product_name"
+                                                        for="refProductName"
+                                                        value="Product Name"
+                                                    />
+                                                </div>
+                                                <div class="shrink-0 grow-0 basis-auto w-full">
+                                                    <input
+                                                        type="file"
+                                                        @input="formUpload.file = $event.target.files[0]" 
+                                                        class="w-full border-gray-400"
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <progress v-if="formUpload.progress" :value="formUpload.progress.percentage" max="100">
+                                                    {{ formUpload.progress.percentage }}%
+                                                    </progress>
+                                                </div>
+                                                <button @click="validateProduct" class="bg-blue-500 font-bold text-white py-1.5 px-4 rounded-md">
+                                                    Upload File
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-white shadow-sm rounded-md border border-solid border-gray-100 mb-4">
+                                <div class="flex flex-col">
+                                    <div class="bg-gray-50 font-bold rounded-t-md p-4">
+                                        Basic Informations
+                                    </div>
+                                    <div class="flex flex-wrap p-2">
+                                        <div class="shrink-0 grow-0 basis-auto w-full md:w-1/2 p-2">
+                                            <div class="flex flex-wrap">
+                                                <div class="shrink-0 grow-0 basis-auto w-full mb-2">
+                                                    <InputLabel
+                                                        for="refProductName"
                                                         value="Product Name"
                                                     />
                                                 </div>
                                                 <div class="shrink-0 grow-0 basis-auto w-full mb-2">
                                                     <TextInput
-                                                        id="product_name"
+                                                        v-model="formProduct.product_name"
+                                                        id="refProductName"
                                                         class="w-full"
                                                         placeholder="enter here"
                                                     />
                                                 </div>
                                                 <div class="">
                                                     <InputError
-                                                        message=""
+                                                        :message="formProduct.errors.product_name"
                                                     />
                                                 </div>
                                             </div>
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
@@ -76,11 +108,11 @@
                                                     />
                                                 </div>
                                                 <div class="shrink-0 grow-0 basis-auto w-full mb-2">
-                                                    <TextInput
+                                                    <!-- <TextInput
                                                         id="product_name"
                                                         class="w-full"
                                                         placeholder="enter here"
-                                                    />
+                                                    /> -->
                                                 </div>
                                                 <div class="">
                                                     <InputError
@@ -117,24 +149,52 @@
                     </div>
                 </div>
             </div>
-            {{ JSON.stringify(contents) }}
-            </div>
+        </div>
     </div>
 </template>
 <script setup>
     import InputError from '@/Components/InputError.vue';
     import InputLabel from '@/Components/InputLabel.vue';
     import TextInput from '@/Components/TextInput.vue';
+    import { Link, useForm } from '@inertiajs/vue3';
 
-    defineProps({
+    const { product } = defineProps({
         product: {
             type: Object,
-            default: () => {},
-            required: true
+            default: () => {}
         }
-    })
+    });
 
-    const contents = Array.from({ length: 10 }).map((_, key) => ({
-        name: `Name ${key}`
-    }))
+    const formProduct = useForm({
+        product_name: product?.product_name || '',
+    });
+
+    const validateProduct = () => {
+        if (product?.id) {
+            return formProduct.put(route('products.update', product.id), {
+                preserveScroll: true,
+                onSuccess: () => formProduct.reset(),
+                onError: () => {
+                    if (formProduct.errors.product_name) {
+                        refProductName.value.focus();
+                    }
+                },
+            });
+        }
+
+        return formProduct.post(route('products.store'), {
+            preserveScroll: true,
+            onSuccess: () => formProduct.reset(),
+            onError: () => {
+                if (formProduct.errors.product_name) {
+                    refProductName.value.focus();
+                }
+            },
+        });
+    }
+
+    
+    const formUpload = useForm({
+        file: null,
+    });
 </script>
