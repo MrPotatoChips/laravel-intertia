@@ -86,11 +86,15 @@ class ProductController extends Controller
 
     public function upload(Request $request) {
         if ($request->hasFile('file')) {
-            Storage::putFile(
+            $file = Storage::putFile(
                 path: 'temp',
                 file: $request->file('file')
             );
         }
+
+        return response()->json([
+          'file' => $request->file()
+        ]);
     }
     /**
      * Remove the specified resource from storage.

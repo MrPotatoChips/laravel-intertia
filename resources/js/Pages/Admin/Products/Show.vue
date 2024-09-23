@@ -47,7 +47,7 @@
                                                     {{ formUpload.progress.percentage }}%
                                                     </progress>
                                                 </div>
-                                                <button @click="validateProduct" class="bg-blue-500 font-bold text-white py-1.5 px-4 rounded-md">
+                                                <button @click="validateUpload" class="bg-blue-500 font-bold text-white py-1.5 px-4 rounded-md">
                                                     Upload File
                                                 </button>
                                             </div>
@@ -192,9 +192,15 @@
             },
         });
     }
-
     
     const formUpload = useForm({
+        product: product.id,
         file: null,
     });
+
+    const validateUpload = () => {
+        formUpload.post(route('products.upload'), {
+            forceFormData: true,
+        })
+    }
 </script>

@@ -24,7 +24,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('Landing');
     })->name('landing');
 
-    Route::apiResource('/admin/products', ProductController::class);
+    Route::prefix('admin')->group(function () {
+        
+        Route::apiResource('/products', ProductController::class);
+        Route::post('upload', [ProductController::class, 'upload'])->name('products.upload');
+    });
 });
 
 Route::middleware('auth')->group(function () {
