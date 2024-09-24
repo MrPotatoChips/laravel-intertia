@@ -194,7 +194,7 @@
     }
     
     const formUpload = useForm({
-        product: product.id,
+        product: product?.id,
         file: null,
     });
 

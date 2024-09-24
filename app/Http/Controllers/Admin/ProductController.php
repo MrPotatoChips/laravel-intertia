@@ -53,7 +53,7 @@ class ProductController extends Controller
         $product = new Product($request->validated());
         $product->save();
 
-        return Redirect::to(route('products.index'))->with([
+        return Redirect::to(route('products.index'))->withViewData([
             'message' => 'Product has been Created!'
         ]);
     }
@@ -79,7 +79,7 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
         $product->update($request->validated());
 
-        return Redirect::to(route('products.index'))->with([
+        return Redirect::to(route('products.index'))->withViewData([
             'message' => 'Product has been Updated!'
         ]);
     }

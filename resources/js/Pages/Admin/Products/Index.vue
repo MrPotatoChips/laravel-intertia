@@ -76,6 +76,9 @@
                 </div>
             </div>
         </div>
+        <div class="w-full">
+            {{ JSON.stringify($page.props) }}
+        </div>
     </div>
 </template>
 <script setup>
@@ -84,7 +87,7 @@ import TextInput from '@/Components/TextInput.vue';
 import { Link } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
-const { products, search, filters } = defineProps({
+const { products, search, message, filters } = defineProps({
     products: {
         type: Object,
         default: () => ({
@@ -121,8 +124,7 @@ const { products, search, filters } = defineProps({
     }
 })
 
-
-console.log(filters)
+console.log({ products, search, message, filters })
 
 const refSearch = ref(search)
 </script>
