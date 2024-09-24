@@ -1,15 +1,15 @@
 <template>
-    <div class="h-screen flex justify-center items-center">
-        <div class="flex flex-wrap p-4 md:w-1/2">
-            <div class="shrink-0 grow-0 basis-auto w-full p-2">
+    <div class="flex">
+        <div class="w-full flex flex-wrap p-4">
+            <div class="w-full shrink-0 grow-0 basis-auto p-2">
                 <div class="flex flex-wrap">
-                    <div class="shrink-0 grow-0 basis-auto w-full mb-2 pr-2 top-0:hidden">
+                    <div class="w-full shrink-0 grow-0 basis-auto mb-2 pr-2">
                         <InputLabel
                             for="refSearch"
                             value="Search"
                         />
                     </div>
-                    <div class="shrink-0 grow-0 basis-auto w-full mb-2 pr-2">
+                    <div class="w-full shrink-0 grow-0 basis-auto mb-2 pr-2">
                         <TextInput
                             v-model="refSearch"
                             id="refSearch"
@@ -17,7 +17,7 @@
                             placeholder="search here"
                         />
                     </div>
-                    <div class="shrink-0 grow-0 basis-auto mb-2 flex flex-wrap items-end">
+                    <div class="shrink-0 grow-0 basis-auto flex flex-wrap items-end mb-2">
                         <Link
                             :href="route('products.show', 'create')"
                             class="bg-blue-500 font-bold text-white py-1.5 px-4 rounded-md"
@@ -27,7 +27,7 @@
                     </div>
                 </div>
             </div>
-            <div class="shrink-0 grow-0 basis-auto w-full p-2">
+            <div class="w-full shrink-0 grow-0 basis-auto p-2">
                 <table class="w-full">
                     <thead class="bg-gray-100">
                         <tr>
@@ -76,16 +76,19 @@
                 </div>
             </div>
         </div>
-        <div class="w-full">
-            {{ JSON.stringify($page.props) }}
-        </div>
     </div>
 </template>
 <script setup>
-import InputLabel from '@/Components/InputLabel.vue';
-import TextInput from '@/Components/TextInput.vue';
 import { Link } from '@inertiajs/vue3';
 import { ref } from 'vue';
+
+import AppFullLayout from '@/Layouts/FullLayout.vue'
+import InputLabel from '@/Components/InputLabel.vue';
+import TextInput from '@/Components/TextInput.vue';
+
+defineOptions({
+    layout: AppFullLayout
+})
 
 const { products, search, message, filters } = defineProps({
     products: {

@@ -172,31 +172,13 @@
         }
     });
 
-    const forms = {
-        product: useForm({
-            product_name: product?.product_name || '',
-        }),
-        uploads: useForm({
-            product: product?.id,
-            file: null,
-        })
-    },,
+    const formProduct = useForm({
+        product_name: product?.product_name || '',
+    });
 
-    const methods = {
-        validateProducts: () => {
-            if (product?.id) {
-                return formProduct.put(route('products.update', product.id), {
-                    preserveScroll: true,
-                    onSuccess: () => formProduct.reset(),
-                    onError: () => {
-                        if (formProduct.errors.product_name) {
-                            refProductName.value.focus();
-                        }
-                    },
-                });
-            }
-
-            return formProduct.post(route('products.store'), {
+    const validateProduct = () => {
+        if (product?.id) {
+            return formProduct.put(route('products.update', product.id), {
                 preserveScroll: true,
                 onSuccess: () => formProduct.reset(),
                 onError: () => {
@@ -205,11 +187,28 @@
                     }
                 },
             });
-        },
-        validateUpload: () => {
-            formUpload.post(route('products.upload'), {
-                forceFormData: true,
-            })
         }
+
+        return formProduct.post(route('products.store'), {
+            preserveScroll: true,
+            onSuccess: () => formProduct.reset(),
+            onError: () => {
+                if (formProduct.errors.product_name) {
+                    refProductName.value.focus();
+                }
+            },
+        });
     }
+    
+    const formUpload = useForm({
+        product: product?.id,
+        file: null,
+    });
+
+    const validateUpload = () => {
+        formUpload.post(route('products.upload'), {
+            forceFormData: true,
+        })
+    }
+
 </script>

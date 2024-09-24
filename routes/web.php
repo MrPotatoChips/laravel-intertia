@@ -24,6 +24,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('Landing');
     })->name('landing');
 
+    
+    Route::get('/sidebar', function () {
+        return Inertia::render('Sidebar');
+    })->name('sidebar');
+
+
     Route::prefix('admin')->group(function () {
         
         Route::apiResource('/products', ProductController::class);
