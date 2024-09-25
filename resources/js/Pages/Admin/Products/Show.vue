@@ -1,5 +1,6 @@
 <template>
-    <div class="bg-blue-50">
+    <div>
+        <Head title="Create Product" />
         <div class="max-w-6xl mx-auto relative">
             <div class="flex flex-wrap">
                 <div class="w-full p-2 sticky top-[65px] z-50">
@@ -12,8 +13,11 @@
                             >
                                 Discard
                             </Link>
-                            <button @click="validateProduct" class="bg-blue-500 font-bold text-white py-1.5 px-4 rounded-md">
-                                {{ product ? 'Update Record' : 'Save Record' }}
+                            <button
+                                class="bg-blue-500 font-bold text-white py-1.5 px-4 rounded-md"
+                                @click.prevent="validate.product"
+                            >
+                                {{ product?.id ? 'Update Record' : 'Save Record' }}
                             </button>
                         </div>
                     </div>
@@ -27,7 +31,7 @@
                                         Banners
                                     </div>
                                     <div class="flex flex-wrap p-2">
-                                        <div class="shrink-0 grow-0 basis-auto w-full md:w-1/2 p-2">
+                                        <div class="shrink-0 grow-0 basis-auto w-full p-2">
                                             <div class="flex flex-wrap">
                                                 <div class="shrink-0 grow-0 basis-auto w-full mb-2">
                                                     <InputLabel
@@ -35,19 +39,35 @@
                                                         value="Product Name"
                                                     />
                                                 </div>
-                                                <div class="shrink-0 grow-0 basis-auto w-full">
-                                                    <input
-                                                        type="file"
-                                                        @input="formUpload.file = $event.target.files[0]" 
-                                                        class="w-full border-gray-400"
-                                                    />
+                                                <div class="shrink-0 grow-0 basis-auto w-full mb-2">
+                                                    <div class="flex items-center justify-center w-full">
+                                                        <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-50 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+                                                            <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                                                <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                                                                </svg>
+                                                                <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                                                                    <span class="font-semibold">Click to upload</span> or drag and drop
+                                                                </p>
+                                                                <p class="text-xs text-gray-500 dark:text-gray-400">
+                                                                    SVG, PNG, JPG or GIF (MAX. 800x400px)
+                                                                </p>
+                                                            </div>
+                                                            <input
+                                                                id="dropzone-file"
+                                                                type="file"
+                                                                class="hidden" 
+                                                                @input="form.banner.file = $event.target.files[0]"
+                                                            />
+                                                        </label>
+                                                    </div> 
                                                 </div>
                                                 <div>
-                                                    <progress v-if="formUpload.progress" :value="formUpload.progress.percentage" max="100">
-                                                    {{ formUpload.progress.percentage }}%
+                                                    <progress v-if="form.banner.progress" :value="form.banner.progress.percentage" max="100">
+                                                    {{ form.banner.progress.percentage }}%
                                                     </progress>
                                                 </div>
-                                                <button @click="validateUpload" class="bg-blue-500 font-bold text-white py-1.5 px-4 rounded-md">
+                                                <button @click.prevent="validate.banner" class="bg-blue-500 font-bold text-white py-1.5 px-4 rounded-md">
                                                     Upload File
                                                 </button>
                                             </div>
@@ -71,7 +91,7 @@
                                                 </div>
                                                 <div class="shrink-0 grow-0 basis-auto w-full mb-2">
                                                     <TextInput
-                                                        v-model="formProduct.product_name"
+                                                        v-model="form.product.product_name"
                                                         id="refProductName"
                                                         class="w-full"
                                                         placeholder="enter here"
@@ -79,7 +99,7 @@
                                                 </div>
                                                 <div class="">
                                                     <InputError
-                                                        :message="formProduct.errors.product_name"
+                                                        :message="form.product.errors.product_name"
                                                     />
                                                 </div>
                                             </div>
@@ -154,7 +174,7 @@
 </template>
 <script setup>
 
-    import { Link, useForm } from '@inertiajs/vue3';
+    import { Head, Link, useForm  } from '@inertiajs/vue3';
 
     import AppFullLayout from '@/Layouts/FullLayout.vue'
     import InputError from '@/Components/InputError.vue';
@@ -172,43 +192,39 @@
         }
     });
 
-    const forms = {
+    const form = {
         product: useForm({
             product_name: product?.product_name || '',
         }),
-        uploads: useForm({
+        banner: useForm({
             product: product?.id,
             file: null,
         })
-    },,
+    }
 
-    const methods = {
-        validateProducts: () => {
+    const validate = {
+        product: () => {
             if (product?.id) {
-                return formProduct.put(route('products.update', product.id), {
+                return form.product.put(route('products.update', product.id), {
                     preserveScroll: true,
-                    onSuccess: () => formProduct.reset(),
+                    onSuccess: () => form.product.reset(),
                     onError: () => {
-                        if (formProduct.errors.product_name) {
-                            refProductName.value.focus();
-                        }
+
                     },
                 });
             }
 
-            return formProduct.post(route('products.store'), {
+            return form.product.post(route('products.store'), {
                 preserveScroll: true,
-                onSuccess: () => formProduct.reset(),
+                onSuccess: () => form.product.reset(),
                 onError: () => {
-                    if (formProduct.errors.product_name) {
-                        refProductName.value.focus();
-                    }
+                    
                 },
             });
         },
-        validateUpload: () => {
-            formUpload.post(route('products.upload'), {
-                forceFormData: true,
+        banner: () => {
+            return form.banner.post('products.upload', {
+                forceFormData: true
             })
         }
     }
