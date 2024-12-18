@@ -317,8 +317,8 @@
             </div>
             <div
                 class="-ml-12 -mt-12 p-12 lg:sticky lg:top-4 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:overflow-hidden">
-                <img class="w-[48rem] max-w-none rounded-xl bg-gray-900 shadow-xl ring-1 ring-gray-400/10 sm:w-[57rem]"
-                    src="https://tailwindui.com/img/component-images/dark-project-app-screenshot.png" alt="" />
+                <img class="w-[48rem] max-w-none rounded-xl ring-1 ring-gray-400/10 sm:w-[85rem]"
+                    src="http://127.0.0.1:8000/images/lycaon.png" alt="" />
             </div>
             <div
                 class="lg:col-span-2 lg:col-start-1 lg:row-start-2 lg:mx-auto lg:grid lg:w-full lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 lg:px-8">
@@ -427,7 +427,7 @@ const products = [
         id: 1,
         name: 'Basic Tee',
         href: '#',
-        imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg',
+        imageSrc: 'http://127.0.0.1:8000/images/lycaon.png',
         imageAlt: "Front of men's Basic Tee in black.",
         price: '$35',
         color: 'Black',
@@ -436,7 +436,7 @@ const products = [
         id: 1,
         name: 'Basic Tee',
         href: '#',
-        imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg',
+        imageSrc: 'http://127.0.0.1:8000/images/lycaon.png',
         imageAlt: "Front of men's Basic Tee in black.",
         price: '$35',
         color: 'Black',
@@ -445,7 +445,7 @@ const products = [
         id: 1,
         name: 'Basic Tee',
         href: '#',
-        imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg',
+        imageSrc: 'http://127.0.0.1:8000/images/lycaon.png',
         imageAlt: "Front of men's Basic Tee in black.",
         price: '$35',
         color: 'Black',
@@ -454,7 +454,7 @@ const products = [
         id: 1,
         name: 'Basic Tee',
         href: '#',
-        imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg',
+        imageSrc: 'http://127.0.0.1:8000/images/lycaon.png',
         imageAlt: "Front of men's Basic Tee in black.",
         price: '$35',
         color: 'Black',
