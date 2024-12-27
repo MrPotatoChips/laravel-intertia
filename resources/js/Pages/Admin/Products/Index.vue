@@ -1,5 +1,5 @@
 <template>
-    <WhenVisible :data="['products']" buffer="500">
+    <WhenVisible :data="['products']" :buffer="500">
         <template #fallback>
             <div class="w-full h-[100vh] flex justify-center items-center">
                 <div>
@@ -7,7 +7,7 @@
                 </div>
             </div>
         </template>
-        
+
         <div class="flex">
             <div class="w-full flex flex-wrap p-4">
                 <div class="w-full shrink-0 grow-0 basis-auto p-2">
@@ -24,6 +24,7 @@
                                 id="refSearch"
                                 class="w-full"
                                 placeholder="search here"
+
                             />
                         </div>
                         <div class="shrink-0 grow-0 basis-auto flex flex-wrap items-end mb-2">
@@ -32,6 +33,14 @@
                                 class="transition ease-in-out delay-150 bg-blue-500 hover:scale-105 hover:bg-indigo-500 duration-300 font-bold text-white py-1.5 px-4 rounded-md"
                             >
                                 Add
+                            </Link>
+
+                            <Link
+                                :href="route('products.index')"
+                                :only="['oops']"
+                                class="transition ease-in-out delay-150 bg-blue-500 hover:scale-105 hover:bg-indigo-500 duration-300 font-bold text-white py-1.5 px-4 rounded-md"
+                            >
+                                Reload
                             </Link>
                         </div>
                     </div>
@@ -70,7 +79,7 @@
                     <div class="flex flex-wrap gap-1">
                         <Link
                             v-for="(link, key) in products.links"
-                            :href="link.url"
+                            :href="link.url || ''"
                             :key="key"
                             :class="[
                                 'rounded-full px-3 py-0.5 border border-2', {
@@ -100,7 +109,7 @@ defineOptions({
     layout: AppFullLayout
 })
 
-const { products, search, message, filters } = defineProps({
+const { products, search, message, filters, oops } = defineProps({
     products: {
         type: Object,
         default: () => ({
@@ -137,7 +146,7 @@ const { products, search, message, filters } = defineProps({
     }
 })
 
-console.log({ products, search, message, filters })
+console.log({ products, search, message, filters, oops })
 
 const refSearch = ref(search)
 </script>

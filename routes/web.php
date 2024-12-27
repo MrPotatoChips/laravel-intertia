@@ -16,31 +16,30 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/dashboard', function () {
+    Route::get('dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
 
-    Route::get('/landing', function () {
+    Route::get('landing', function () {
         return Inertia::render('Landing');
     })->name('landing');
 
-    
-    Route::get('/sidebar', function () {
+
+    Route::get('sidebar', function () {
         return Inertia::render('Sidebar');
     })->name('sidebar');
 
 
     Route::prefix('admin')->group(function () {
-        
-        Route::apiResource('/products', ProductController::class);
-        Route::post('upload', [ProductController::class, 'upload'])->name('products.upload');
+        Route::apiResource('products', ProductController::class);
+        Route::put('upload/{product}', [ProductController::class, 'upload'])->name('products.upload');
     });
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 require __DIR__.'/auth.php';

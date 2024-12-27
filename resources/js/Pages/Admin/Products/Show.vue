@@ -2,6 +2,7 @@
     <div>
         <Head title="Create Product" />
         <div class="max-w-6xl mx-auto relative">
+            {{ message }}
             <div class="flex flex-wrap">
                 <div class="w-full p-2 sticky top-[65px] z-50">
                     <div class="min-h-[75px] bg-white shadow-md rounded-md flex items-center justify-between p-4">
@@ -34,12 +35,6 @@
                                         <div class="shrink-0 grow-0 basis-auto w-full p-2">
                                             <div class="flex flex-wrap">
                                                 <div class="shrink-0 grow-0 basis-auto w-full mb-2">
-                                                    <InputLabel
-                                                        for="refProductName"
-                                                        value="Product Name"
-                                                    />
-                                                </div>
-                                                <div class="shrink-0 grow-0 basis-auto w-full mb-2">
                                                     <div class="flex items-center justify-center w-full">
                                                         <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-50 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
                                                             <div class="flex flex-col items-center justify-center pt-5 pb-6">
@@ -56,11 +51,11 @@
                                                             <input
                                                                 id="dropzone-file"
                                                                 type="file"
-                                                                class="hidden" 
+                                                                class="hidden"
                                                                 @input="form.banner.file = $event.target.files[0]"
                                                             />
                                                         </label>
-                                                    </div> 
+                                                    </div>
                                                 </div>
                                                 <div>
                                                     <progress v-if="form.banner.progress" :value="form.banner.progress.percentage" max="100">
@@ -85,14 +80,14 @@
                                             <div class="flex flex-wrap">
                                                 <div class="shrink-0 grow-0 basis-auto w-full mb-2">
                                                     <InputLabel
-                                                        for="refProductName"
+                                                        for="productName"
                                                         value="Product Name"
                                                     />
                                                 </div>
                                                 <div class="shrink-0 grow-0 basis-auto w-full mb-2">
                                                     <TextInput
                                                         v-model="form.product.product_name"
-                                                        id="refProductName"
+                                                        id="productName"
                                                         class="w-full"
                                                         placeholder="enter here"
                                                     />
@@ -119,7 +114,7 @@
                                         Type
                                     </div>
                                     <div class="flex flex-wrap p-2">
-                                        <div class="shrink-0 grow-0 basis-auto w-full p-2">
+                                        <!-- <div class="shrink-0 grow-0 basis-auto w-full p-2">
                                             <div class="flex flex-wrap">
                                                 <div class="shrink-0 grow-0 basis-auto w-full mb-2">
                                                     <InputLabel
@@ -128,11 +123,11 @@
                                                     />
                                                 </div>
                                                 <div class="shrink-0 grow-0 basis-auto w-full mb-2">
-                                                    <!-- <TextInput
+                                                    <TextInput
                                                         id="product_name"
                                                         class="w-full"
                                                         placeholder="enter here"
-                                                    /> -->
+                                                    />
                                                 </div>
                                                 <div class="">
                                                     <InputError
@@ -143,25 +138,14 @@
                                         </div>
                                         <div class="shrink-0 grow-0 basis-auto w-full p-2">
                                             <div class="flex flex-wrap">
-                                                <div class="shrink-0 grow-0 basis-auto w-full mb-2">
-                                                    <InputLabel
-                                                        for="product_name"
-                                                        value="Product Name"
-                                                    />
-                                                </div>
                                                 <div class="shrink-0 grow-0 basis-auto w-full mb-2">
                                                     <select class="w-full border-gray-300 text-gray-600 focus:border-blue-500 focus:ring-blue-500 rounded-md shadow-sm">
                                                         <option>select here</option>
                                                         <option>select 2</option>
                                                     </select>
                                                 </div>
-                                                <div class="">
-                                                    <InputError
-                                                        message=""
-                                                    />
-                                                </div>
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
                             </div>
@@ -185,10 +169,14 @@
         layout: AppFullLayout
     })
 
-    const { product } = defineProps({
+    const { product, message } = defineProps({
         product: {
             type: Object,
             default: () => {}
+        },
+        message: {
+            type: String,
+            default: () => ''
         }
     });
 
@@ -218,14 +206,20 @@
                 preserveScroll: true,
                 onSuccess: () => form.product.reset(),
                 onError: () => {
-                    
+
                 },
             });
         },
         banner: () => {
-            return form.banner.post('products.upload', {
+            return form.banner.put(route('products.upload', product.id), {
                 forceFormData: true
             })
         }
     }
+
+    console.log({
+        product,
+        message,
+        form
+    })
 </script>
